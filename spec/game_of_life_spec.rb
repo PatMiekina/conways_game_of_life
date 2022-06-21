@@ -1,56 +1,45 @@
-# 5x5 grid
 describe "rspec" do
-    it "true equals true" do
+    it "true is true" do
         expect(true).to eq(true)
     end
 end
 
 describe "game of life" do
-    it "returns output as an array with empty input" do
-        expect(game_of_life().class).to eq(Array)
+    it "output is an array" do
+        expect(game).to be_a(Array)
     end
 
-    it "returns output as an array with input" do
-        expect(game_of_life([0, 0, 1]).class).to eq(Array)
+    it "output isn't empty if there is an input" do
+        expect(game([0, 0, 0])).not_to be_empty
     end
 
-    # check if there is growth with an array as an input
-    context "cells die when 1 or 0 neighbours" do
-        it "cell dies when 0 neighbours" do
-            expect(game_of_life([0, 1, 0])).to eq([0, 0, 0])
+    context "live cell with less than 2 neighbours dies" do
+        it "live cell has one neighbour" do
+            expect(game([1, 1, 0])).to eq([0, 0, 0])
         end
-        it "cell dies when 1 neighbour" do
-            expect(game_of_life([0, 1, 1])).to eq([0, 0, 0])
+        it "live cell has 0 neighbours" do
+            expect(game([0, 1, 0])).to eq([0, 0, 0])
         end
     end
-    context "cell lives when 2-3 neighbours" do
-        it "cell lives when 2 neighbours" do
-            expect(game_of_life([1, 1, 1])).to eq([0, 1, 0])
+
+    context "live cell with 2-3 cells lives" do
+        it "live cell has 2 neighbours" do
+            expect(game([1, 1, 1])).to eq([0, 1, 0])
         end
     end
 end
 
-def game_of_life(cells = [])
-    # if no neighbours - cell dies
-    cells_new =  []
+def game(cells = [])
+    cells_out = cells
     cells.each_with_index do |cell, index|
-        if cells[index - 1] == 0 || cells[index + 1] == 0
-
-            cells_new << 0
-        end
-        if cells[index - 1] == 1 && cells[index + 1] == 1
-            cells_new << 1
+        if cell == 1
+            if cells[index + 1] == 1 && cells[index - 1] == 1
+                cells_out[index] = 1
+            end
+            if cells[index - 1] == 0 || cells[index + 1] == 0
+                cells_out[index] = 0
+            end
         end
     end
-    cells_new
+    cells_out
 end
-
-
-
-# [[0, 0, 1, 0, 0],
-#  [0, 0, 1, 0, 0],
-#  [0, 0, 1, 0, 0],
-#  [0, cell, 1, 0, 0],
-#  [0, 0, 1, 0, 0]]
-
-# access cell -> array[3][1]
