@@ -74,7 +74,6 @@ end
 
 # def ignore_left
 # end
-
 # def ignore_bottom
 # end
 
